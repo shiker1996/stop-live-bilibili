@@ -4,6 +4,8 @@
 
 一个 Chrome / Edge 浏览器扩展，用于拦截 B 站（bilibili.com）的付费弹窗，在付款前弹出劝退提醒，防止冲动消费。
 
+<video src="https://img.shiker.tech/project/export-1787153777383.mp4" controls=""></video>
+
 ## 功能
 
 - **网络层拦截**：在后台通过 `declarativeNetRequest` 直接屏蔽 `pay.bilibili.com` 和下单接口 `api.money.bilibili.com`（POST），让支付弹窗内容无法加载、无法创建订单。
