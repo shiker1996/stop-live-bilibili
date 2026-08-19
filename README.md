@@ -4,7 +4,9 @@
 
 一个 Chrome / Edge 浏览器扩展，用于拦截 B 站（bilibili.com）的付费弹窗，在付款前弹出劝退提醒，防止冲动消费。
 
-<video src="https://img.shiker.tech/project/export-1787153777383.mp4" controls=""></video>
+<p align="center">
+  <a href="https://img.shiker.tech/project/export-1785841213192.mp4"><img src="https://github.com/user-attachments/assets/cbdf792f-97c9-45e6-bc72-a1c9bd2193ea" alt="点击播放插件演示" width="760"></a>
+</p>
 
 ## 功能
 
