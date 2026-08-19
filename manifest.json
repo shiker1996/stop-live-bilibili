@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Stop Pay · B站防冲动消费",
+  "version": "1.0.0",
+  "description": "拦截 B 站付费弹窗，在付款前弹出劝退提醒，防止冲动消费。",
+  "minimum_chrome_version": "96",
+  "permissions": ["declarativeNetRequest", "storage"],
+  "host_permissions": ["*://*.bilibili.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.bilibili.com/*"],
+      "js": ["content/content.js"],
+      "css": ["content/overlay.css"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Stop Pay · 防冲动消费",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "options_page": "options.html",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

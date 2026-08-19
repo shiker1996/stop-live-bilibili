@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  body {
+    width: 240px;
+    margin: 0;
+    padding: 16px;
+    font-family: system-ui, "Microsoft YaHei", sans-serif;
+    color: #18191c;
+  }
+  h1 {
+    font-size: 16px;
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h1 .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    background: #ccd0d6;
+  }
+  p {
+    margin: 0 0 12px;
+    font-size: 12px;
+    color: #61666d;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+  .switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    flex: none;
+  }
+  .switch input {
+    display: none;
+  }
+  .switch .slider {
+    position: absolute;
+    inset: 0;
+    background: #ccd0d6;
+    border-radius: 24px;
+    transition: 0.2s;
+    cursor: pointer;
+  }
+  .switch .slider::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    top: 3px;
+    left: 3px;
+    transition: 0.2s;
+  }
+  .switch input:checked + .slider {
+    background: #fb7299;
+  }
+  .switch input:checked + .slider::before {
+    transform: translateX(20px);
+  }
+  .link {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    color: #00a1d6;
+    text-decoration: none;
+  }
+  .link:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+  <h1><span class="dot" id="dot"></span>Stop Pay</h1>
+  <p>B站防冲动消费 · 拦截付费弹窗</p>
+  <div class="row">
+    <span>启用拦截</span>
+    <label class="switch">
+      <input type="checkbox" id="enabled" />
+      <span class="slider"></span>
+    </label>
+  </div>
+  <a href="#" class="link" id="options">更多设置</a>
+<script src="popup.js"></script>
+</body>
+</html>
