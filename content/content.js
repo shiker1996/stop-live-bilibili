@@ -31,12 +31,30 @@
     return typeof url === "string" && PAY_URL_RE.test(url);
   }
 
+  function isCloseButton(el) {
+    if (!el || el.nodeType !== 1) return false;
+    return String(el.className || "")
+      .split(/\s+/)
+      .some((t) => /close/i.test(t));
+  }
+
   function ownText(el) {
     let txt = "";
     for (const child of el.childNodes) {
       if (child.nodeType === 3) txt += child.nodeValue;
     }
     return txt.replace(/\s+/g, "");
+  }
+
+  function shallowText(el) {
+    let txt = ownText(el);
+    for (const child of el.children) {
+      if (child.nodeType !== 1) continue;
+      const cls = (child.className || "") + " " + (child.id || "");
+      if (/menu|panel|dropdown|popup|popover|list|options/i.test(cls)) continue;
+      txt += ownText(child);
+    }
+    return txt;
   }
 
   function matches(el) {
@@ -54,7 +72,7 @@
     if (own && own.length <= 10 && TEXT_RE.test(own)) return true;
     const tag = el.tagName;
     if (tag === "BUTTON" || tag === "A" || (el.getAttribute && el.getAttribute("role") === "button")) {
-      const full = (el.textContent || "").replace(/\s+/g, "");
+      const full = shallowText(el);
       if (full && TEXT_RE.test(full)) return true;
     }
     return false;
@@ -120,7 +138,7 @@
       "</ul>" +
       '<div class="stop-pay-count">' + sec + "</div>" +
       '<div class="stop-pay-buttons">' +
-      '<button class="stop-pay-cancel" disabled>放弃支付</button>' +
+      '<button class="stop-pay-cancel">放弃支付</button>' +
       continueBtnHtml +
       "</div>" +
       "</div>";
@@ -130,21 +148,24 @@
     const cancelBtn = overlay.querySelector(".stop-pay-cancel");
     const continueBtn = overlay.querySelector(".stop-pay-continue");
 
-    let left = sec;
-    const timer = setInterval(() => {
-      left -= 1;
-      if (left <= 0) {
-        clearInterval(timer);
-        countEl.textContent = "0";
-        cancelBtn.disabled = false;
-        if (continueBtn) continueBtn.disabled = false;
-        return;
-      }
-      countEl.textContent = String(left);
-    }, 1000);
-
     cancelBtn.addEventListener("click", dismiss);
     if (continueBtn) continueBtn.addEventListener("click", continueAnyway);
+
+    if (sec > 0) {
+      let left = sec;
+      const timer = setInterval(() => {
+        left -= 1;
+        if (left <= 0) {
+          clearInterval(timer);
+          countEl.textContent = "0";
+          if (continueBtn) continueBtn.disabled = false;
+          return;
+        }
+        countEl.textContent = String(left);
+      }, 1000);
+    } else if (continueBtn) {
+      continueBtn.disabled = false;
+    }
   }
 
   function block(e) {
@@ -154,6 +175,10 @@
       return;
     }
     const target = e.composedPath ? e.composedPath()[0] : e.target;
+    let node = target;
+    for (let i = 0; i < 4 && node; i++, node = node.parentElement) {
+      if (isCloseButton(node)) return;
+    }
     const el = findPayTarget(target);
     if (!el) return;
     e.preventDefault();
