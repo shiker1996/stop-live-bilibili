@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<title>Stop Pay · 设置</title>
+<title>Stop Live · 设置</title>
 <style>
   body {
     font-family: system-ui, "Microsoft YaHei", sans-serif;
@@ -78,24 +78,12 @@
 </head>
 <body>
   <div class="card">
-    <h1>Stop Pay 设置</h1>
+    <h1>Stop Live 设置</h1>
 
     <div class="field">
       <label class="check">
         <input type="checkbox" id="enabled" />
-        <span>启用拦截</span>
-      </label>
-    </div>
-
-    <div class="field">
-      <label for="cooldown">劝退冷静期（秒）</label>
-      <input type="number" id="cooldown" min="0" max="60" />
-    </div>
-
-    <div class="field">
-      <label class="check">
-        <input type="checkbox" id="bypass" />
-        <span>允许「仍然要支付」按钮（放行 60 秒）</span>
+        <span>启用直播屏蔽</span>
       </label>
     </div>
 
@@ -103,8 +91,7 @@
     <span id="status"></span>
 
     <p class="note">
-      提示：插件在网络层拦截 pay.bilibili.com 及下单接口，并在页面上拦截「充值 / 开通 / 充电 /
-      送礼物」等付费入口，弹出劝退提醒。关闭拦截后所有规则立即失效。
+      启用后会阻止打开 live.bilibili.com，并隐藏 B 站页面中链接到直播间的推荐卡片。关闭后会恢复页面卡片和直播间访问。
     </p>
   </div>
 <script src="options.js"></script>

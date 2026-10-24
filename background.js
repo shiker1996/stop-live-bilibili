@@ -1,49 +1,28 @@
-const DEFAULT_RULES = [
-  {
-    id: 1,
-    priority: 2,
-    action: { type: "block" },
-    condition: {
-      urlFilter: "||pay.bilibili.com^",
-      resourceTypes: [
-        "main_frame",
-        "sub_frame",
-        "xmlhttprequest",
-        "script",
-        "image",
-        "media",
-        "font",
-        "ping",
-        "other"
-      ]
-    }
-  },
-  {
-    id: 2,
-    priority: 2,
-    action: { type: "block" },
-    condition: {
-      urlFilter: "||api.money.bilibili.com^",
-      requestMethods: ["post"],
-      resourceTypes: ["xmlhttprequest", "other"]
-    }
+const LIVE_RULE = {
+  id: 3,
+  priority: 1,
+  action: { type: "block" },
+  condition: {
+    urlFilter: "||live.bilibili.com^",
+    resourceTypes: ["main_frame", "sub_frame"]
   }
-];
+};
 
-const RULE_IDS = new Set(DEFAULT_RULES.map((r) => r.id));
+// Rules 1 and 2 belonged to the previous payment-blocking version.
+const RULE_IDS = [1, 2, LIVE_RULE.id];
 
 async function applyRules(enabled) {
   try {
     const current = await chrome.declarativeNetRequest.getDynamicRules();
     const toRemove = current
-      .filter((r) => RULE_IDS.has(r.id))
-      .map((r) => r.id);
+      .filter((rule) => RULE_IDS.includes(rule.id))
+      .map((rule) => rule.id);
     await chrome.declarativeNetRequest.updateDynamicRules({
       removeRuleIds: toRemove,
-      addRules: enabled ? DEFAULT_RULES : []
+      addRules: enabled ? [LIVE_RULE] : []
     });
-  } catch (e) {
-    console.error("[StopPay] applyRules failed:", e);
+  } catch (error) {
+    console.error("[Live Block] applyRules failed:", error);
   }
 }
 
@@ -52,27 +31,11 @@ async function syncRules() {
   await applyRules(enabled);
 }
 
-chrome.runtime.onInstalled.addListener(() => {
-  syncRules();
-});
-
-chrome.runtime.onStartup.addListener(() => {
-  syncRules();
-});
+chrome.runtime.onInstalled.addListener(syncRules);
+chrome.runtime.onStartup.addListener(syncRules);
 
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === "sync" && changes.enabled) {
     applyRules(changes.enabled.newValue);
-  }
-});
-
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  if (msg && msg.type === "stopPayBypass") {
-    const seconds = Number(msg.seconds) || 60;
-    applyRules(false).then(() => {
-      setTimeout(() => syncRules(), seconds * 1000);
-      sendResponse({ ok: true });
-    });
-    return true;
   }
 });

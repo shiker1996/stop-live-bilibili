@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Stop Pay · B站防冲动消费",
-  "version": "1.0.0",
-  "description": "拦截 B 站付费弹窗，在付款前弹出劝退提醒，防止冲动消费。",
+  "name": "Stop Live · B站直播屏蔽",
+  "version": "2.0.1",
+  "description": "屏蔽 B 站直播间，并从推荐流中隐藏直播卡片。",
   "minimum_chrome_version": "96",
   "permissions": ["declarativeNetRequest", "storage"],
   "host_permissions": ["*://*.bilibili.com/*"],
@@ -13,14 +13,12 @@
     {
       "matches": ["*://*.bilibili.com/*"],
       "js": ["content/content.js"],
-      "css": ["content/overlay.css"],
-      "run_at": "document_start",
-      "all_frames": true
+      "run_at": "document_start"
     }
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Stop Pay · 防冲动消费",
+    "default_title": "Stop Live · 屏蔽 B 站直播",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
